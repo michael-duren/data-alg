@@ -1,4 +1,3 @@
-using System.Net.NetworkInformation;
 using Lib.Interfaces;
 
 namespace Lib
@@ -38,11 +37,6 @@ namespace Lib
             _tail = node;
         }
 
-        public T? Get(int index)
-        {
-            throw new NotImplementedException();
-        }
-
         public void InsertAt(T item, int index)
         {
             if (index > _length)
@@ -66,12 +60,11 @@ namespace Lib
                 _head = new Node<T>() { Value = item };
                 return;
             }
-            Node<T> current = _head;
 
-            for (int i = 0; i < index; i++)
-            {
-                current = current.Next!;
-            }
+            Node<T>? current = getAt(index); // get the node of the current index
+
+            if (current is null)
+                return;
 
             Node<T> node =
                 new()
@@ -80,6 +73,7 @@ namespace Lib
                     Next = current,
                     Prev = current.Prev
                 };
+
             current.Prev = node;
 
             if (node.Prev is not null)
@@ -120,38 +114,77 @@ namespace Lib
                 if (comparer.Equals(current!.Value, item)) // if found break
                     break;
 
-                current = current.Next!;
+                current = current.Next!; // else get next node
             }
 
             if (current is null) // if we didn't find return null
                 return default;
 
-            _length--;
-            if (_length == 0)
-            {
-                _head = _tail = null;
-                return default;
-            }
-
-            if (current.Prev is not null)
-                current.Prev = current.Next;
-
-            if (current.Next is not null)
-                current.Next = current.Prev;
-
-            if (current == _head)
-                _head = current.Next;
-
-            if (current == _tail)
-                _tail = current.Prev;
-
-            current.Prev = current.Next = null;
-            return current.Value;
+            return removeNode(current); // else remove the node
         }
 
         public T? RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            Node<T>? node = getAt(index);
+
+            if (node is null)
+                return default;
+
+            return removeNode(node);
+        }
+
+        public T? Get(int index)
+        {
+            Node<T>? node = getAt(index);
+            if (node is not null)
+                return node.Value;
+
+            return default;
+        }
+
+        private T? removeNode(Node<T> node)
+        {
+            _length--;
+
+            if (_length == 0) // if we are removing last item
+            {
+                if (_head is null)
+                    return default;
+                T valueOut = _head.Value;
+                _head = _tail = null;
+                return valueOut;
+            }
+
+            if (node.Prev is not null)
+                node.Prev = node.Next;
+
+            if (node.Next is not null)
+                node.Next = node.Prev;
+
+            if (node == _head)
+                _head = node.Next;
+
+            if (node == _tail)
+                _tail = node.Prev;
+
+            node.Prev = node.Next = null;
+            return node.Value;
+        }
+
+        private Node<T>? getAt(int index)
+        {
+            Node<T>? current = _head;
+            if (current is null)
+                return null;
+
+            for (int i = 0; i < index; i++)
+            {
+                if (current.Next is null)
+                    return null;
+                current = current.Next;
+            }
+
+            return current;
         }
     }
 }
