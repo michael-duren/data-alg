@@ -15,9 +15,26 @@ namespace Lib
         private Node<T>? _head;
         private Node<T>? _tail;
 
-        public LinkList()
+        public LinkList(T[] items)
         {
-            _length = 0;
+            _length = 0; // start length at 0
+
+            // add each item to the list on creation
+            foreach (T item in items)
+            {
+                Append(item);
+            }
+        }
+
+        public bool Contains(T item)
+        {
+            for (int i = 0; i < _length; i++)
+            {
+                if (Get(i)!.Equals(item))
+                    return true;
+            }
+
+            return false;
         }
 
         public void Append(T item)
@@ -78,7 +95,7 @@ namespace Lib
 
             if (node.Prev is not null)
             {
-                current.Prev.Next = current;
+                node.Prev.Next = current;
             }
         }
 
@@ -109,9 +126,10 @@ namespace Lib
 
             Node<T> current = _head; // start at head
             EqualityComparer<T> comparer = EqualityComparer<T>.Default;
+
             for (int i = 0; i < _length; i++)
             {
-                if (comparer.Equals(current!.Value, item)) // if found break
+                if (comparer.Equals(current.Value, item)) // if found break
                     break;
 
                 current = current.Next!; // else get next node
@@ -120,6 +138,7 @@ namespace Lib
             if (current is null) // if we didn't find return null
                 return default;
 
+            // decreased length in removeNode
             return removeNode(current); // else remove the node
         }
 

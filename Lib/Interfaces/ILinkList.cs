@@ -2,6 +2,7 @@ namespace Lib.Interfaces
 {
     public interface ILinkList<T>
     {
+        bool Contains(T item);
         void InsertAt(T item, int index);
         T? Remove(T item);
 
