@@ -175,10 +175,10 @@ namespace Lib
             }
 
             if (node.Prev is not null)
-                node.Prev = node.Next;
+                node.Prev.Next = node.Next;
 
             if (node.Next is not null)
-                node.Next = node.Prev;
+                node.Next.Prev = node.Prev;
 
             if (node == _head)
                 _head = node.Next;

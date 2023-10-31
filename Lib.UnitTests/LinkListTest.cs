@@ -11,7 +11,7 @@ namespace Lib.UnitTests
             // act
           list.Remove(2);
 
-          Assert.True(list.Contains(2));
+          Assert.False(list.Contains(2));
         }
     }
 }
