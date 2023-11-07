@@ -78,7 +78,7 @@ namespace Lib
                 return;
             }
 
-            Node<T>? current = getAt(index); // get the node of the current index
+            Node<T>? current = GetAt(index); // get the node of the current index
 
             if (current is null)
                 return;
@@ -139,29 +139,29 @@ namespace Lib
                 return default;
 
             // decreased length in removeNode
-            return removeNode(current); // else remove the node
+            return RemoveNode(current); // else remove the node
         }
 
         public T? RemoveAt(int index)
         {
-            Node<T>? node = getAt(index);
+            Node<T>? node = GetAt(index);
 
             if (node is null)
                 return default;
 
-            return removeNode(node);
+            return RemoveNode(node);
         }
 
         public T? Get(int index)
         {
-            Node<T>? node = getAt(index);
+            Node<T>? node = GetAt(index);
             if (node is not null)
                 return node.Value;
 
             return default;
         }
 
-        private T? removeNode(Node<T> node)
+        private T? RemoveNode(Node<T> node)
         {
             _length--;
 
@@ -190,7 +190,7 @@ namespace Lib
             return node.Value;
         }
 
-        private Node<T>? getAt(int index)
+        private Node<T>? GetAt(int index)
         {
             Node<T>? current = _head;
             if (current is null)
